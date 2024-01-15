@@ -1,0 +1,149 @@
+definitions:
+  entity.HttpResp:
+    properties:
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  entity.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  entity.RegisterRequest:
+    properties:
+      age:
+        type: integer
+      full_name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - age
+    - full_name
+    - password
+    - username
+    type: object
+  entity.User:
+    properties:
+      age:
+        type: integer
+      full_name:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    email: nafisa.alfiani.ica@gmail.com
+    name: Nafisa Alfiani
+paths:
+  /v1/ms-paylater:
+    get:
+      consumes:
+      - application/json
+      description: Get logged in user detail
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+      security:
+      - BearerAuth: []
+      summary: Fetch user detail
+      tags:
+      - users
+  /v1/ms-paylater/login:
+    post:
+      consumes:
+      - application/json
+      description: Allow existing user to login
+      parameters:
+      - description: login request
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/entity.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+      summary: Login existing user
+      tags:
+      - users
+  /v1/ms-paylater/register:
+    post:
+      consumes:
+      - application/json
+      description: Allow new user to register their account info
+      parameters:
+      - description: register request
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/entity.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/entity.HttpResp'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+      summary: Register new user
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
