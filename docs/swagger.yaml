@@ -9,6 +9,13 @@ definitions:
       status:
         type: integer
     type: object
+  entity.LoanRequest:
+    properties:
+      tier:
+        type: string
+    required:
+    - tier
+    type: object
   entity.LoginRequest:
     properties:
       password:
@@ -34,6 +41,13 @@ definitions:
     - full_name
     - password
     - username
+    type: object
+  entity.TransactionRequest:
+    properties:
+      amount:
+        type: number
+    required:
+    - amount
     type: object
   entity.User:
     properties:
@@ -76,6 +90,63 @@ paths:
       summary: Fetch user detail
       tags:
       - users
+  /v1/ms-paylater/limit:
+    get:
+      consumes:
+      - application/json
+      description: Fetch user balance and limit
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+      security:
+      - BearerAuth: []
+      summary: Get user limit
+      tags:
+      - loan
+  /v1/ms-paylater/loan:
+    post:
+      consumes:
+      - application/json
+      description: Create loan data for logged in user
+      parameters:
+      - description: loan request
+        in: body
+        name: loan_request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.LoanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+      security:
+      - BearerAuth: []
+      summary: Create loan data
+      tags:
+      - loan
   /v1/ms-paylater/login:
     post:
       consumes:
@@ -106,6 +177,38 @@ paths:
       summary: Login existing user
       tags:
       - users
+  /v1/ms-paylater/pay:
+    post:
+      consumes:
+      - application/json
+      description: Log transaction to pay user balance
+      parameters:
+      - description: loan request
+        in: body
+        name: trx_request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+      security:
+      - BearerAuth: []
+      summary: Recover user balance
+      tags:
+      - loan
   /v1/ms-paylater/register:
     post:
       consumes:
@@ -141,6 +244,38 @@ paths:
       summary: Register new user
       tags:
       - users
+  /v1/ms-paylater/tarik-saldo:
+    post:
+      consumes:
+      - application/json
+      description: Log transaction to withdraw from balance
+      parameters:
+      - description: loan request
+        in: body
+        name: trx_request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.HttpResp'
+      security:
+      - BearerAuth: []
+      summary: Withdraw user balance
+      tags:
+      - loan
 securityDefinitions:
   BearerAuth:
     in: header

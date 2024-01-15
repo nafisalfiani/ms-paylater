@@ -43,6 +43,8 @@ func main() {
 	// auto migrate DB changes
 	if err := db.AutoMigrate(
 		&entity.User{},
+		&entity.Transaction{},
+		&entity.Loan{},
 	); err != nil {
 		log.Fatalln(err)
 	}

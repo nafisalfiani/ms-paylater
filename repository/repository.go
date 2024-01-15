@@ -7,12 +7,16 @@ import (
 )
 
 type Repository struct {
-	User UserInterface
+	User        UserInterface
+	Loan        LoanInterface
+	Transaction TransactionInterface
 }
 
 func InitRepository(db *gorm.DB) *Repository {
 	return &Repository{
-		User: initUser(db),
+		User:        initUser(db),
+		Loan:        initLoan(db),
+		Transaction: initTransaction(db),
 	}
 }
 

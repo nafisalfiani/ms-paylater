@@ -20,19 +20,23 @@ import (
 )
 
 type Handler struct {
-	config    *config.Value
-	validator *validator.Validate
-	logger    *logrus.Logger
-	user      repository.UserInterface
+	config      *config.Value
+	validator   *validator.Validate
+	logger      *logrus.Logger
+	user        repository.UserInterface
+	loan        repository.LoanInterface
+	transaction repository.TransactionInterface
 }
 
 // Init create new Handler object
 func Init(config *config.Value, repo *repository.Repository, validator *validator.Validate, logger *logrus.Logger) *Handler {
 	return &Handler{
-		config:    config,
-		validator: validator,
-		logger:    logger,
-		user:      repo.User,
+		config:      config,
+		validator:   validator,
+		logger:      logger,
+		user:        repo.User,
+		loan:        repo.Loan,
+		transaction: repo.Transaction,
 	}
 }
 
